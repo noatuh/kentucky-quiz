@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kentucky Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #ffffff;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin: 5px 0;
+        }
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #263238;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kentucky Quiz</h1>
+        <p>Answer all 30 questions below and click "Submit" to see your score.</p>
+        <form id="kentucky-quiz">
+            <div id="questions"></div>
+            <button type="button" class="submit-button" onclick="gradeTest()">Submit</button>
+        </form>
+        <div id="results" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "What is the capital of Kentucky?", options: ['Louisville', 'Frankfort', 'Lexington', 'Bowling Green'], answer: "Frankfort" },
+            { question: "What is Kentucky's state bird?", options: ['Cardinal', 'Sparrow', 'Robin', 'Bluejay'], answer: "Cardinal" },
+            { question: "What famous horse race is held in Kentucky?", options: ['Preakness Stakes', 'Belmont Stakes', 'Kentucky Derby', 'Breeders’ Cup'], answer: "Kentucky Derby" },
+            { question: "What is Kentucky's state flower?", options: ['Goldenrod', 'Dogwood', 'Rose', 'Tulip'], answer: "Goldenrod" },
+            { question: "Which of these rivers runs through Kentucky?", options: ['Ohio River', 'Mississippi River', 'Colorado River', 'Hudson River'], answer: "Ohio River" },
+            { question: "What is the state nickname of Kentucky?", options: ['Bluegrass State', 'Sunshine State', 'Lone Star State', 'Peach State'], answer: "Bluegrass State" },
+            { question: "Which bourbon is produced in Kentucky?", options: ['Jack Daniels', 'Jim Beam', 'Crown Royal', 'Jameson'], answer: "Jim Beam" },
+            { question: "What famous fried chicken chain was founded in Kentucky?", options: ['Popeyes', 'KFC', 'Chick-fil-A', 'Zaxby’s'], answer: "KFC" },
+            { question: "Which university is known for its Wildcats basketball team?", options: ['University of Louisville', 'University of Kentucky', 'Western Kentucky University', 'Eastern Kentucky University'], answer: "University of Kentucky" },
+            { question: "What is the state motto of Kentucky?", options: ['United we stand, divided we fall', 'In God we trust', 'Live free or die', 'The people rule'], answer: "United we stand, divided we fall" },
+            { question: "What national park in Kentucky is known for its caves?", options: ['Yellowstone', 'Mammoth Cave', 'Great Smoky Mountains', 'Arches'], answer: "Mammoth Cave" },
+            { question: "Who was the 16th President of the United States born in Kentucky?", options: ['George Washington', 'Abraham Lincoln', 'Thomas Jefferson', 'Andrew Jackson'], answer: "Abraham Lincoln" },
+            { question: "What is the state animal of Kentucky?", options: ['Gray Squirrel', 'White-tailed Deer', 'American Black Bear', 'Raccoon'], answer: "Gray Squirrel" },
+            { question: "Which Kentucky city is known as the 'Horse Capital of the World'?", options: ['Louisville', 'Lexington', 'Bowling Green', 'Frankfort'], answer: "Lexington" },
+            { question: "What is the largest city in Kentucky?", options: ['Frankfort', 'Louisville', 'Lexington', 'Paducah'], answer: "Louisville" },
+            { question: "Which Native American trail ran through Kentucky?", options: ['Oregon Trail', 'Wilderness Road', 'Appalachian Trail', 'Trail of Tears'], answer: "Wilderness Road" },
+            { question: "Which famous musician is from Kentucky?", options: ['Elvis Presley', 'Bill Monroe', 'Johnny Cash', 'Dolly Parton'], answer: "Bill Monroe" },
+            { question: "What is Kentucky's state tree?", options: ['Tulip Poplar', 'Oak', 'Maple', 'Pine'], answer: "Tulip Poplar" },
+            { question: "Which historical figure is associated with Kentucky frontier history?", options: ['Daniel Boone', 'Davy Crockett', 'Kit Carson', 'Lewis and Clark'], answer: "Daniel Boone" },
+            { question: "What is the name of Kentucky's state song?", options: ['My Old Kentucky Home', 'Home Sweet Home', 'Blue Moon of Kentucky', 'Take Me Home'], answer: "My Old Kentucky Home" },
+            { question: "What type of mining has historically been significant in Kentucky?", options: ['Gold', 'Coal', 'Silver', 'Iron'], answer: "Coal" },
+            { question: "Which Kentucky city is home to the Corvette Museum?", options: ['Louisville', 'Bowling Green', 'Lexington', 'Frankfort'], answer: "Bowling Green" },
+            { question: "What is the state fruit of Kentucky?", options: ['Strawberry', 'Blackberry', 'Peach', 'Apple'], answer: "Blackberry" },
+            { question: "What is the state fish of Kentucky?", options: ['Brook Trout', 'Channel Catfish', 'Largemouth Bass', 'Smallmouth Bass'], answer: "Kentucky Spotted Bass" },
+            { question: "Which Civil War battle took place in Kentucky?", options: ['Battle of Gettysburg', 'Battle of Perryville', 'Battle of Antietam', 'Battle of Shiloh'], answer: "Battle of Perryville" },
+            { question: "Which famous Hatfield-McCoy feud is associated with Kentucky?", options: ['Feud of 1810', 'Tobacco Wars', 'Hatfield-McCoy Feud', 'Whiskey Rebellion'], answer: "Hatfield-McCoy Feud" },
+            { question: "What is the name of Kentucky's state dance?", options: ['Waltz', 'Clogging', 'Square Dance', 'Polka'], answer: "Clogging" },
+            { question: "What Kentucky-based distillery is known for Maker's Mark?", options: ['Buffalo Trace', 'Four Roses', 'Maker’s Mark', 'Wild Turkey'], answer: "Maker’s Mark" },
+            { question: "What is the state gemstone of Kentucky?", options: ['Diamond', 'Ruby', 'Agate', 'Sapphire'], answer: "Agate" },
+            { question: "What is the state insect of Kentucky?", options: ['Honeybee', 'Ladybug', 'Butterfly', 'Dragonfly'], answer: "Honeybee" },
+        ];
+
+        function loadQuestions() {
+            const questionsDiv = document.getElementById('questions');
+            questions.forEach((q, index) => {
+                const questionHtml = `
+                    <div class="question">
+                        <p><strong>${index + 1}. ${q.question}</strong></p>
+                        ${q.options.map(option => `
+                            <label>
+                                <input type="radio" name="question${index}" value="${option}"> ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                questionsDiv.innerHTML += questionHtml;
+            });
+        }
+
+        function gradeTest() {
+            let allAnswered = true;
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="question${index}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                }
+            });
+
+            if (!allAnswered) {
+                alert("Please answer all questions before submitting the test.");
+                return;
+            }
+
+            let score = 0;
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `<p>You scored ${score} out of ${questions.length}.</p>`;
+        }
+
+        loadQuestions();
+    </script>
+</body>
+</html>
